@@ -19,6 +19,14 @@ namespace SearchApi.Web.Mapping
                 .ForMember(dest => dest.EventType, opt => opt.MapFrom(src => nameof(PersonSearchAccepted)))
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => "Search requested accepted by provider"))
                 .ReverseMap();
+
+            CreateMap<PersonSearchRejected, ProviderSearchEventStatus>()
+              .ForMember(dest => dest.SearchRequestId, opt => opt.MapFrom(src => src.SearchRequestId))
+              .ForMember(dest => dest.ProviderName, opt => opt.MapFrom(src => src.ProviderProfile.Name))
+              .ForMember(dest => dest.TimeStamp, opt => opt.MapFrom(src => src.TimeStamp))
+              .ForMember(dest => dest.EventType, opt => opt.MapFrom(src => nameof(PersonSearchRejected)))
+              .ForMember(dest => dest.Message, opt => opt.MapFrom(src => "Search requested rejected by provider. Reasons: " + string.Join(", ",src.Reasons.Select(x =>  x.ErrorMessage ))))
+              .ReverseMap();
         }
     }
 }
